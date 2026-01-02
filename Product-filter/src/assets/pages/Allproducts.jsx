@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { products } from "../assets/products";
+import { sanityClient } from "../../sanityClient";
+// import { products } from "../assets/products";
+
 
 const Allproducts = () => {
 
@@ -9,22 +11,43 @@ const Allproducts = () => {
   const { category } = useParams();
   const navigate = useNavigate();
 
-  const [filterProducts, setFilterProducts] = useState([]);
+  // const [filterProducts, setFilterProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+
   const [showFilter, setShowFilter] = useState(false);
 
-  const applyFilter = () => {
-    if (category) {
-      setFilterProducts(
-        products.filter(item => item.category === category)
-      );
-    } else {
-      setFilterProducts(products);
-    }
-  };
+  // const applyFilter = () => {
+  //   if (category) {
+  //     setFilterProducts(
+  //       products.filter(item => item.category === category)
+  //     );
+  //   } else {
+  //     setFilterProducts(products);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   applyFilter();
+  // }, [category]);
 
   useEffect(() => {
-    applyFilter();
-  }, [category]);
+  const query = `
+    *[_type == "product" ${category ? `&& category == "${category}"` : ""}]{
+      _id,
+      title,
+      category,
+      price,
+      inStock,
+      slug,
+      "imageUrls": images[].asset->url
+    }
+  `;
+
+  sanityClient.fetch(query)
+    .then(data => setProducts(data))
+    .catch(console.error);
+}, [category]);
+
 
 
 
@@ -54,17 +77,17 @@ const Allproducts = () => {
 
         {/* Products Grid */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {filterProducts.map(item => (
-            <div  onClick={()=>navigate(`/product/${item._id}`)} key={item._id} className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300">
+          {products.map(item => (
+            <div  onClick={()=>navigate(`/product/${item.slug.current}`)} key={item._id} className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300">
               <div className="bg-gray-200 h-30 flex items-center justify-center">
-                <img src={item.image} alt="" className="bg-gray-50 m-2" />
+                <img src={item.imageUrls?.[0]} alt={item.title} className="bg-gray-50 m-2" />
               </div>
               <div className="p-4">
-                <div className={`flex items-center gap-2 text-sm ${item.available ? "text-green-500" : "text-gray-500"}`}>
-                  <span className={`w-2 h-2 rounded-full ${item.available ? "bg-green-500" : "bg-gray-500"}`}></span>
-                  {item.available ? "Available" : "Out of stock"}
+                <div className={`flex items-center gap-2 text-sm ${item.inStock ? "text-green-500" : "text-gray-500"}`}>
+                  <span className={`w-2 h-2 rounded-full ${item.inStock ? "bg-green-500" : "bg-gray-500"}`}></span>
+                  {item.inStock ? "Available" : "Out of stock"}
                 </div>
-                <p className="text-gray-900 font-medium">{item.name}</p>
+                <p className="text-gray-900 font-medium">{item.title}</p>
                 <p className="text-sm text-gray-600">{item.category}</p>
                 <p className="font-semibold mt-1">₹{item.price}</p>
               </div>
