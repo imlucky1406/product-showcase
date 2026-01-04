@@ -53,11 +53,11 @@ const Allproducts = () => {
 
   return (
     <div className="my-4">
-      <p className="text-gray-600">Browse products by category</p>
+      <p className="text-pink-950 font-semibold">Browse Your Product</p>
       <div className="flex flex-col sm:flex-row gap-5 mt-5">
 
         {/* Mobile Filter Button */}
-        <button onClick={() => setShowFilter(prev => !prev)} className={`py-1 px-3 border rounded text-sm sm:hidden ${showFilter ? "bg-blue-600 text-white" : ""}`}>Filters</button>
+        <button onClick={() => setShowFilter(prev => !prev)} className={`py-1 px-3 border border-pink-800 rounded text-sm text-pink-800 font-semibold sm:hidden ${showFilter ? "bg-blue-600 text-white" : ""}`}>Filters</button>
 
         {/* Filters */}
         <div className={`flex flex-col gap-4 text-sm ${showFilter ? "flex" : "hidden"} sm:flex`}>
@@ -69,7 +69,7 @@ const Allproducts = () => {
             "Glasses",
             "Perfumes"
           ].map(cat => (
-            <p key={cat} onClick={() => category === cat ? navigate("/")  : navigate(`/products/${cat}`)} className={`pl-3 py-1.5 pr-16 border border-black rounded cursor-pointer transition-all hover:bg-indigo-100 ${category === cat ? "bg-indigo-200 text-black" : "text-gray-600"}`}>
+            <p key={cat} onClick={() => category === cat ? navigate("/products")  : navigate(`/products/${cat}`)} className={`pl-3 py-1.5 pr-16 border border-black font-serif rounded cursor-pointer transition-all hover:bg-pink-100 ${category === cat ? "bg-pink-950 text-white hover:bg-pink-950" : "text-black"}`}>
               {cat}
             </p>
           ))}

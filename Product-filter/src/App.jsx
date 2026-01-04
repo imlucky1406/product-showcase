@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import Navbar from "./assets/components/Navbar"
 import Allproducts from "./assets/pages/Allproducts"
 import Products from "./assets/pages/Products"
+import Home from "./assets/pages/Home"
 
 function App() {
 
@@ -10,8 +11,9 @@ function App() {
 
     <div className="mx-4 sm:mx-[10%]">
       <Navbar />
-      <Routes>    
-        <Route path="/" element={<Allproducts />} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Allproducts />} />
         <Route path="/products/:category" element={<Allproducts />} />
         <Route path="/product/:slug" element={<Products />} />
       </Routes>

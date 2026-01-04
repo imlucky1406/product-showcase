@@ -6,6 +6,22 @@ import gls1 from "./glass1.png"
 import jkt1 from "./jacket1.png"
 import perf1 from "./perf1.png"
 
+import banner from "./banner.png"
+import logo from "./logo.png"
+import tag_logo from "./logo_tag.png"
+import cross from "./cross_icon.png"
+import menu_icon from "./menu_icon.svg"
+
+
+export const assets = {
+    tag_logo,
+    logo,
+    banner,
+    cross,
+    menu_icon,
+    
+};
+
 
 
 export const products = [

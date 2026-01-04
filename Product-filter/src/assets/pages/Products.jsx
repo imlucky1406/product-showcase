@@ -7,7 +7,8 @@ const Products = () => {
 
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
-
+  const [currentIdx, setCurrentIdx] = useState(0);
+  
    useEffect(() => {
     const query = `
       *[_type == "product" && slug.current == $slug][0]{
@@ -30,16 +31,37 @@ const Products = () => {
     return <h2 className="text-center mt-10">Product not found</h2>;
   }
 
-  console.log();
+  // console.log();
 
 
   return (
     <div>
     <div className='flex flex-col sm:flex-row gap-4'>
       <div>
-        <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={product.imageUrls?.[0]} alt={product.title} />
+        <div className='bg-gray-200 w-60 h-80 flex rounded-md items-center justify-center mb-2'>
+          <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={product.imageUrls[currentIdx]} alt={product.title} />
+        </div>
+        <div>
+          <div className="flex gap-2 mt-2">
+            {product.imageUrls?.map((imgUrl, idx) => (
+              <button
+                  key={idx}
+                  onClick={() => setCurrentIdx(idx)}
+                  className={`w-16 h-16 rounded overflow-hidden ${idx === currentIdx ? "ring-2 ring-pink-800" : ""}`}>
+                  <img
+                    src={imgUrl}
+                    alt={`${product.title} thumb ${idx}`}
+                    className="w-full h-full object-cover"
+                  />
+              </button>        
+            ))}
+          </div>
+        </div>
       </div>
-      <div className='flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
+      <div>
+        
+      </div>
+      <div className='flex-1 border-2 border-gray-400 rounded-md p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
         <p className='flex items-center gap-2 text-2xl font-medium text-gray-900'>
           {product.title}
         </p>
@@ -57,12 +79,11 @@ const Products = () => {
         </p>
         <p className={`mt-2 ${product.inStock ? "text-green-600" : "text-red-500"}`}>
           {product.inStock ? "In Stock" : "Out of Stock"}
-        </p>
-       
+        </p>      
       </div>
     </div>
 
-</div>
+    </div>
   )
 }
 
