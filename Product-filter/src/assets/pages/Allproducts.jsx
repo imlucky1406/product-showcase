@@ -16,19 +16,7 @@ const Allproducts = () => {
 
   const [showFilter, setShowFilter] = useState(false);
 
-  // const applyFilter = () => {
-  //   if (category) {
-  //     setFilterProducts(
-  //       products.filter(item => item.category === category)
-  //     );
-  //   } else {
-  //     setFilterProducts(products);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   applyFilter();
-  // }, [category]);
+// }, [category]);
 
   useEffect(() => {
   const query = `
