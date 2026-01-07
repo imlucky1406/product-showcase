@@ -50,7 +50,7 @@ const CategoryMenu = () => {
                         <img className='sm:w-24 p-4 filter brightness-0 invert' src={item.image} alt="" />
                     </div>
                     <p>{item.category}</p>
-                
+                    
             </Link>
         ))}
       </div>
