@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/products';
+import { sanityClient } from '../../sanityClient';
 
 const Navbar = () => {
 
@@ -8,29 +9,44 @@ const Navbar = () => {
 
     const [showMenu, setshowMenu] = useState('')
 
+    const [logo, setLogo] = useState(null)
+
+    useEffect(() => {
+    const query = `
+      *[_type == "theme"][0]{
+        "logoUrl": logo.asset->url
+      }
+    `
+
+    sanityClient
+      .fetch(query)
+      .then(data => setLogo(data?.logoUrl))
+      .catch(console.error)
+  }, [])
+
 
 
 
   return (
-    <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-        <img onClick={()=> navigate('/')} className='w-44 cursor-pointer hover:scale-105 duration-500' src={assets.logo} alt="logo" />
+    <div className='mx-4 sm:mx-[10%] flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
+        <img onClick={()=> navigate('/')} className='w-44 cursor-pointer hover:scale-105 duration-500' src={logo || assets.logo} alt="logo" />
         {/* <img src={logo} alt="" /> */}
-        <ul className='hidden md:flex text-pink-950 item-start gap-5 font-medium'>
+        <ul className='hidden md:flex text-primary item-start gap-5 font-medium'>
             <NavLink to='/'>
                 <li className='py-1'>HOME</li>
-                <hr className='border-none outline-none h-0.5 bg-pink-950 w-3/5 m-auto hidden'/>
+                <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden'/>
             </NavLink>
             <NavLink to='/products'>
                 <li className='py-1'>ALL PRODUCT</li>
-                <hr className='border-none outline-none h-0.5 bg-pink-950 w-3/5 m-auto hidden'/>
+                <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden'/>
             </NavLink>
             <NavLink to='/about'>
                 <li className='py-1'>ABOUT</li>
-                <hr className='border-none outline-none h-0.5 bg-pink-950 w-3/5 m-auto hidden'/>
+                <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden'/>
             </NavLink>
             <NavLink to='/contact'>
                 <li className='py-1'>CONTACT</li>
-                <hr className='border-none outline-none h-0.5 bg-pink-950 w-3/5 m-auto hidden'/>
+                <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden'/>
             </NavLink>
         </ul>
         <div className='flex items-center gap-4'>
