@@ -26,7 +26,6 @@ const Navbar = () => {
 
 
 
-
   return (
     <div className='mx-4 sm:mx-[10%] flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
         <img onClick={()=> navigate('/')} className='w-44 cursor-pointer hover:scale-105 duration-500' src={logo || assets.logo} alt="logo" />

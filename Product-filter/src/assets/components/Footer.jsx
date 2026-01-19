@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { sanityClient } from '../../sanityClient'
+import { NavLink } from 'react-router-dom'
 
 const Footer = () => {
 
@@ -31,8 +32,12 @@ const Footer = () => {
         <div>
             <p className='text-xl font-medium mb-5'>COMPANY</p>
             <ul className='flex flex-col gap-2 text-gray-600'>
+              <NavLink to='/'> 
                 <li>Home</li>
-                <li>About us</li>
+              </NavLink>
+                <NavLink to='/about'>
+                  <li>About us</li>
+                </NavLink>  
                 <li>Contact us</li>
                 <li>Privacy policy</li>
             </ul>

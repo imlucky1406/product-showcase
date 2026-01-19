@@ -49,7 +49,7 @@ const Allproducts = () => {
 
   return (
     <div className="mx-4 sm:mx-[10%] my-4">
-      <p className="text-primary font-semibold">Browse Your Product</p>
+      <p className="text-primary text-xl font-bold">Browse Your Product</p>
       <div className="flex flex-col sm:flex-row gap-5 mt-5">
 
         {/* Mobile Filter Button */}
@@ -57,7 +57,7 @@ const Allproducts = () => {
         {/* Filters */}
         <div className={`flex flex-col gap-4 text-sm ${showFilter ? "flex" : "hidden"} sm:flex`}>
           {categories.map(cat => (
-            <p key={cat._id} onClick={() => category === cat.title ? navigate("/products")  : navigate(`/products/${cat.title}`)} className={`pl-3 py-1.5 pr-16 border border-black font-serif rounded cursor-pointer transition-all hover:bg-pink-100 ${category === cat.title ? "bg-pink-950 text-white hover:bg-pink-950" : "text-black"}`}>
+            <p key={cat._id} onClick={() => category === cat.title ? navigate("/products")  : navigate(`/products/${cat.title}`)} className={`pl-3 py-1.5 pr-16 border border-black font-semibold rounded cursor-pointer transition-all hover:text-blue-700 ${category === cat.title ? "bg-pink-950 text-white hover:bg-pink-950" : "text-black"}`}>
               {cat.title}
             </p>
           ))}

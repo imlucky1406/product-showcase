@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
-// import { products } from "../assets/products";
+import React, { useEffect, useState } from "react";
 import { sanityClient } from "../../sanityClient";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 const Products = () => {
-
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [currentIdx, setCurrentIdx] = useState(0);
-  
-   useEffect(() => {
+  const [qty, setQty] = useState(1);
+
+  useEffect(() => {
     const query = `
       *[_type == "product" && slug.current == $slug][0]{
         title,
@@ -20,110 +19,127 @@ const Products = () => {
         "imageUrls": images[].asset->url
       }
     `;
-
-    sanityClient
-      .fetch(query, { slug })
-      .then(data => setProduct(data))
-      .catch(console.error);
+    sanityClient.fetch(query, { slug }).then(setProduct);
   }, [slug]);
 
   if (!product) {
     return <h2 className="text-center mt-10">Product not found</h2>;
   }
 
-  // console.log();
-
-
   return (
-    <div className='mx-4 sm:mx-[10%] my-10'>
-    <div className='flex flex-col sm:flex-row gap-6'>
-  
-      {/* IMAGE SECTION */}
-      <div className='flex-[4] flex flex-col '>
-        <div className='ring-1 ring-gray-400 w-full h-80 flex rounded-md items-center justify-center mb-2'>
-          <img
-            className='w-full h-full object-contain rounded-lg'
-            src={product.imageUrls[currentIdx]}
-            alt={product.title}
-          />
-        </div>
-        <div className="flex gap-2 mt-2">
-          {product.imageUrls?.map((imgUrl, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIdx(idx)}
-              className={`w-16 h-16 rounded overflow-hidden ${idx === currentIdx ? "ring-2 ring-pink-800" : ""}`}
-            >
-              <img
-                src={imgUrl}
-                alt={`${product.title} thumb ${idx}`}
-                className="w-full h-full object-cover"
-              />
-            </button>        
-          ))}
-        </div>
-      </div>
+    <section className="mx-4 sm:mx-[10%] my-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-      {/* DETAILS SECTION */}
-      <div className=' flex flex-col gap-6'>
-        <div className='flex-[6] border-2 border-gray-400 rounded-md p-6 '>
-          <p className='flex items-center gap-2 text-2xl font-medium text-gray-900'>
-            {product.title}
-          </p>
-
-          <p className="text-sm text-gray-500 mt-1">
-            Category: {product.categoryTitle}
-          </p>
-
-          <div>
-            <p className='flex items-center gap-1 text-sm font-medium text-gray-900 mt-3'>
-              Product Details 
-            </p>
-            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>{product.description}</p>
+        {/* LEFT IMAGE SECTION */}
+        <div>
+          <div className="bg-gray-100 rounded-xl flex items-center justify-center h-[420px] mb-4 relative">
+            <img
+              src={product.imageUrls[currentIdx]}
+              alt={product.title}
+              className="object-contain h-full"
+            />
           </div>
 
-          <p className='text-gray-500 font-medium mt-4'>
-            Price: <span className='text-gray-600'>{product.price}</span>
-          </p>
+          {/* THUMBNAILS */}
+          <div className="flex gap-3">
+            {product.imageUrls.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIdx(idx)}
+                className={`w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center 
+                  ${idx === currentIdx ? "ring-2 ring-blue-600" : ""}`}
+              >
+                <img src={img} alt="" className="object-contain h-full" />
+              </button>
+            ))}
+          </div>
+        </div>
 
-          <p className={`mt-2 ${product.inStock ? "text-green-600" : "text-red-500"}`}>
-            {product.inStock ? "In Stock" : "Out of Stock"}
-          </p>  
-      </div>
-      
-      {/* Highlights SECTION */}
+        {/* RIGHT DETAILS SECTION */}
+        <div className="flex flex-col gap-5">
 
-      <div className='flex-[6] border-2 border-gray-400 rounded-md p-6 '>
-          <p className='flex items-center gap-2 text-2xl font-medium text-gray-900'>
-            Highlights
-          </p>
-
-          <p className="text-sm text-gray-500 mt-1">
-            Category: {product.categoryTitle}
-          </p>
-
-          <div>
-            <p className='flex items-center gap-1 text-sm font-medium text-gray-900 mt-3'>
-              Product Details 
-            </p>
-            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>{product.description}</p>
+          {/* TITLE */}
+          <div className="flex items-start justify-between">
+            <h1 className="text-2xl sm:text-3xl font-semibold">
+              {product.title}
+            </h1>
+            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+              30% OFF
+            </span>
           </div>
 
-          <p className='text-gray-500 font-medium mt-4'>
-            Price: <span className='text-gray-600'>{product.price}</span>
+          {/* RATING & STOCK */}
+          <div className="flex items-center gap-3 text-sm">
+            ⭐⭐⭐⭐⭐
+            {/* <span className="text-gray-500">(0 customer reviews)</span> */}
+            <span className="text-green-600 font-medium">
+              {product.inStock ? "In Stock" : "Out of Stock"}
+            </span>
+          </div>
+
+          {/* PRICE */}
+          <p className="text-xl font-semibold">
+            Price:
+            <span className="line-through text-gray-400 ml-2">$888</span>
+            <span className="text-blue-600 ml-2">${product.price}</span>
           </p>
 
-          <p className={`mt-2 ${product.inStock ? "text-green-600" : "text-red-500"}`}>
-            {product.inStock ? "In Stock" : "Out of Stock"}
-          </p>  
+          <hr />
+
+          {/* COLORS
+          <div>
+            <p className="font-medium mb-2">Color:</p>
+            <div className="flex gap-3">
+              <span className="w-6 h-6 rounded-full bg-black ring-2 ring-black"></span>
+              <span className="w-6 h-6 rounded-full bg-white border"></span>
+            </div>
+          </div>
+
+          <hr /> */}
+
+          {/* QUANTITY & ACTIONS */}
+          <div className="flex flex-wrap gap-4 items-center">
+
+            {/* Quantity */}
+            <div className="flex items-center border rounded-full overflow-hidden">
+              <button
+                className="px-4 py-2"
+                onClick={() => setQty(Math.max(1, qty - 1))}
+              >
+                −
+              </button>
+              
+              <span className="px-4">{qty}</span>
+              <button
+                className="px-4 py-2"
+                onClick={() => setQty(qty + 1)}
+              >
+                +
+              </button>
+            </div>
+
+            {/* BUTTONS */}
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full">
+              Purchase Now
+            </button>
+
+            <button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full">
+              Add to Cart
+            </button>
+
+            <button className="w-12 h-12 rounded-full border flex items-center justify-center">
+              &#9825;
+            </button>
+          </div>
+
+          {/* DESCRIPTION */}
+          <p className="text-sm text-gray-600 leading-relaxed mt-4">
+            {product.description}
+          </p>
+        </div>
       </div>
-      </div>
+    </section>
+  );
+};
 
-    </div>
-
-
-    </div>
-  )
-}
-
-export default Products
+export default Products;

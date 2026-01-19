@@ -9,6 +9,8 @@ const AppContext = ({children}) => {
       }
     `
 
+
+
     sanityClient
         .fetch(query)
         .then(data => {
